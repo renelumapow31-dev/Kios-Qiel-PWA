@@ -1,14 +1,20 @@
 {
-  "name": "KIOS QIEL — Kasir",
+  "id": "./",
+  "name": "KIOS QIEL — Kasir Toko",
   "short_name": "KIOS QIEL",
-  "description": "Aplikasi kasir KIOS QIEL",
+  "description": "Aplikasi kasir KIOS QIEL untuk produk, stok, transaksi, dan laporan.",
   "lang": "id-ID",
-  "start_url": "./",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#f4f7fb",
+  "background_color": "#f2f6fc",
   "theme_color": "#075bd8",
+  "categories": [
+    "business",
+    "finance",
+    "productivity"
+  ],
   "icons": [
     {
       "src": "./icons/icon-192.png",
@@ -23,7 +29,7 @@
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-512-maskable.png",
+      "src": "./icons/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

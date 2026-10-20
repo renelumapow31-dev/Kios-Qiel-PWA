@@ -4,10 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#075bd8">
-<meta name="description" content="KIOS QIEL — aplikasi kasir, produk, transaksi, dan laporan penjualan.">
-<link rel="manifest" href="./manifest.webmanifest">
-<link rel="icon" href="./icons/icon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="./icons/icon-192.png">
 <title>KIOS QIEL — Kasir</title>
 <style>
 :root{--blue:#075bd8;--blue2:#087cff;--navy:#07327b;--yellow:#ffd62e;--bg:#f2f6fc;--ink:#13233d;--muted:#70809b;--line:#e5ebf4;--green:#10b981;--red:#ef4444}
@@ -24,7 +20,7 @@ main{max-width:1000px;margin:auto;padding:16px 14px 95px}.section-title{font-siz
 .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:5;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 5px calc(9px + env(safe-area-inset-bottom));box-shadow:0 -4px 20px #1d3c6b0c}.tab{background:none;color:#8290a7;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:750;min-width:58px}.tab span{font-size:21px}.tab.active{color:var(--blue)}
 .page{display:none}.page.active{display:block}.empty{text-align:center;color:var(--muted);padding:24px 8px;font-size:13px}.list-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px}.list-row:last-child{border:0}.badge{font-size:10px;padding:5px 8px;border-radius:8px;background:#e8fff5;color:#07845c;font-weight:800}
 .modal-back{display:none;position:fixed;inset:0;background:#061b3c88;z-index:20;align-items:flex-end;justify-content:center}.modal-back.show{display:flex}.modal{background:#fff;width:100%;max-width:600px;border-radius:24px 24px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}.modal-head{display:flex;align-items:center;justify-content:space-between;font-size:18px;font-weight:900;margin-bottom:12px}.close{background:#eef3fa;border-radius:10px;width:35px;height:35px;font-size:20px}
-.notice{background:#fff8d9;color:#705900;border-radius:12px;padding:11px;font-size:11px;line-height:1.5;margin:12px 0}.receipt{font-family:ui-monospace,monospace;font-size:12px;line-height:1.6;padding:15px;border:1px dashed #b8c5d8;border-radius:12px;white-space:pre-wrap}.small-muted{font-size:11px;color:var(--muted)}
+.cart-sheet-modal{padding-top:12px}.sheet-handle{width:42px;height:5px;border-radius:99px;background:#d7dfeb;margin:0 auto 14px}.cart-sheet-items{max-height:42vh;overflow:auto}.cart-sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cart-sheet-actions .primary{grid-column:1/-1}.notice{background:#fff8d9;color:#705900;border-radius:12px;padding:11px;font-size:11px;line-height:1.5;margin:12px 0}.receipt{font-family:ui-monospace,monospace;font-size:12px;line-height:1.6;padding:15px;border:1px dashed #b8c5d8;border-radius:12px;white-space:pre-wrap}.small-muted{font-size:11px;color:var(--muted)}
 @media(min-width:720px){main{padding:22px 22px 35px}.stats{grid-template-columns:repeat(4,1fr)}.layout{display:grid;grid-template-columns:1.3fr .9fr;gap:16px;align-items:start}.products{grid-template-columns:repeat(3,minmax(0,1fr))}.tabbar{position:static;max-width:1000px;margin:0 auto 20px;border:1px solid var(--line);border-radius:16px;box-shadow:none}.modal-back{align-items:center}.modal{border-radius:22px;margin:20px}}
 
 /* Modern refresh */
@@ -62,7 +58,35 @@ main{max-width:1080px;padding:20px 15px 100px}
 .notice{border-radius:14px}
 @media(min-width:720px){.tabbar{border-radius:20px;backdrop-filter:blur(18px)}.modal{border-radius:25px}}
 
+
+/* Tampilan produk lebih jelas: foto punya ruang sendiri, nama lebih besar */
+.products{gap:12px}
+.product{padding:12px 12px 48px;min-height:0}
+.prod-emoji{height:150px;min-height:150px;width:100%;margin-bottom:12px;padding:8px;display:grid;place-items:center;overflow:hidden;background:#f4f7fc;border:1px solid #e7edf5}
+.prod-emoji img{width:100%;height:100%;object-fit:contain;display:block}
+.prod-name{font-size:16px;font-weight:850;line-height:1.4;min-height:0;overflow-wrap:anywhere;word-break:normal;margin-bottom:8px}
+.prod-meta{font-size:12px;line-height:1.4;margin:5px 0 8px}
+.price{font-size:15px;line-height:1.35;display:block;padding-right:38px}
+.add{bottom:10px;right:10px}
+@media(min-width:720px){
+ .prod-emoji{height:180px;min-height:180px}
+ .prod-name{font-size:17px}
+}
+
+/* Laporan dipisah menjadi kolom Cash dan Transfer */
+#transactions-list .panel{box-shadow:none;background:#fbfdff}
+@media(max-width:420px){#transactions-list .panel{padding:9px!important}#transactions-list .list-row{font-size:11px;overflow-wrap:anywhere}#transactions-list .secondary{font-size:10px}}
 </style>
+
+<meta name="description" content="KIOS QIEL — aplikasi kasir toko dengan keranjang, stok, laporan, dan pembayaran.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="KIOS QIEL">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+
 </head>
 <body>
 <header>
@@ -182,6 +206,14 @@ main{max-width:1080px;padding:20px 15px 100px}
  <button class="tab" data-page="pengaturan" onclick="showPage('pengaturan')"><span>⚙</span>Pengaturan</button>
 </nav>
 
+<div class="modal-back" id="cart-sheet-modal" onclick="if(event.target===this)closeModal('cart-sheet-modal')"><div class="modal cart-sheet-modal">
+ <div class="sheet-handle"></div>
+ <div class="modal-head"><span>🛒 Keranjang Belanja <span id="sheet-cart-count" class="small-muted"></span></span><button class="close" aria-label="Tutup keranjang" onclick="closeModal('cart-sheet-modal')">×</button></div>
+ <div class="cart-sheet-items" id="sheet-cart-items"><div class="empty">Pilih produk untuk memulai transaksi.</div></div>
+ <div class="total-line"><span>Total Belanja</span><span class="grand" id="sheet-cart-total">Rp0</span></div>
+ <div class="cart-sheet-actions"><button class="secondary" onclick="closeModal('cart-sheet-modal')">＋ Pilih Produk Lagi</button><button class="secondary danger" onclick="clearCart()">Kosongkan</button><button class="primary" onclick="openPayment()">Lanjut Pembayaran →</button></div>
+</div></div>
+
 <div class="modal-back" id="payment-modal" onclick="if(event.target===this)closeModal('payment-modal')"><div class="modal">
  <div class="modal-head">Pembayaran <button class="close" onclick="closeModal('payment-modal')">×</button></div>
  <div class="total-line"><span>Total Belanja</span><span class="grand" id="pay-total">Rp0</span></div>
@@ -247,30 +279,21 @@ function updateClock(){document.getElementById('clock').innerHTML=new Date().toL
 setInterval(updateClock,30000);updateClock();
 function productVisual(p,cls=''){return p.photo?`<span class="${cls}"><img src="${p.photo}" alt="${esc(p.name||'Foto produk')}"></span>`:`<span class="${cls}">${esc(p.emoji||'🛍️')}</span>`}
 function renderProducts(){const q=(document.getElementById('product-search')?.value||'').toLowerCase();const cats=['Semua',...new Set(products.map(p=>p.category))];document.getElementById('category-chips').innerHTML=cats.map(c=>`<button class="chip ${category===c?'active':''}" onclick="category='${esc(c)}';renderProducts()">${esc(c)}</button>`).join('');const list=products.filter(p=>(category==='Semua'||p.category===category)&&p.name.toLowerCase().includes(q));document.getElementById('product-grid').innerHTML=list.length?list.map(p=>`<button class="product" onclick="addCart(${p.id})"><div class="prod-emoji">${p.photo?`<img src="${p.photo}" alt="${esc(p.name)}">`:esc(p.emoji||'🛍️')}</div><div class="prod-name">${esc(p.name)}</div><div class="prod-meta">${esc(p.category)} · Stok ${p.stock}</div><div class="price">${rupiah(p.price)}</div><span class="add">+</span></button>`).join(''):'<div class="empty">Produk tidak ditemukan.</div>'}
-function addCart(id){const p=products.find(x=>x.id===id);if(!p||p.stock<=0){alert('Stok produk habis.');return}if((cart[id]||0)>=p.stock){alert('Jumlah melebihi stok yang tersedia.');return}cart[id]=(cart[id]||0)+1;renderCart()}
+function addCart(id){const p=products.find(x=>x.id===id);if(!p||p.stock<=0){alert('Stok produk habis.');return}if((cart[id]||0)>=p.stock){alert('Jumlah melebihi stok yang tersedia.');return}cart[id]=(cart[id]||0)+1;renderCart();if(window.matchMedia('(max-width: 719px)').matches)document.getElementById('cart-sheet-modal').classList.add('show')}
 function changeQty(id,d){const p=products.find(x=>x.id===id);cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];else if(p&&cart[id]>p.stock){cart[id]=p.stock;alert('Jumlah melebihi stok.')}renderCart()}
 function cartTotal(){return Object.entries(cart).reduce((s,[id,q])=>{const p=products.find(x=>x.id===Number(id));return s+(p?p.price*q:0)},0)}
-function renderCart(){const entries=Object.entries(cart);document.getElementById('cart-count').textContent=entries.length?`(${entries.reduce((s,x)=>s+x[1],0)} item)`:'';document.getElementById('cart-items').innerHTML=entries.length?entries.map(([id,q])=>{const p=products.find(x=>x.id===Number(id));return p?`<div class="cart-row"><div class="mini-emoji">${p.photo?`<img src="${p.photo}" alt="${esc(p.name)}">`:esc(p.emoji||'🛍️')}</div><div class="cart-info"><div class="cart-name">${esc(p.name)}</div><div class="cart-price">${rupiah(p.price)} × ${q}</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${q}</span><button onclick="changeQty(${p.id},1)">+</button></div></div>`:''}).join(''):'<div class="empty">Pilih produk untuk memulai transaksi.</div>';document.getElementById('cart-total').textContent=rupiah(cartTotal())}
+function renderCart(){const entries=Object.entries(cart),count=entries.reduce((s,x)=>s+x[1],0);const countText=entries.length?`(${count} item)`:'';const html=entries.length?entries.map(([id,q])=>{const p=products.find(x=>x.id===Number(id));return p?`<div class="cart-row"><div class="mini-emoji">${p.photo?`<img src="${p.photo}" alt="${esc(p.name)}">`:esc(p.emoji||'🛍️')}</div><div class="cart-info"><div class="cart-name">${esc(p.name)}</div><div class="cart-price">${rupiah(p.price)} × ${q}</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${q}</span><button onclick="changeQty(${p.id},1)">+</button></div></div>`:''}).join(''):'<div class="empty">Pilih produk untuk memulai transaksi.</div>';document.getElementById('cart-count').textContent=countText;document.getElementById('cart-items').innerHTML=html;document.getElementById('cart-total').textContent=rupiah(cartTotal());document.getElementById('sheet-cart-count').textContent=countText;document.getElementById('sheet-cart-items').innerHTML=html;document.getElementById('sheet-cart-total').textContent=rupiah(cartTotal())}
 function clearCart(){if(Object.keys(cart).length&&!confirm('Kosongkan semua isi keranjang?'))return;cart={};renderCart()}
-function openPayment(){if(!Object.keys(cart).length){alert('Pilih produk terlebih dahulu.');return}paymentMethod='Cash';selectPay('Cash');document.getElementById('pay-total').textContent=rupiah(cartTotal());document.getElementById('cash-received').value='';document.getElementById('transfer-bank').value='';document.getElementById('transfer-note').value='';document.getElementById('account-note').textContent=(localStorage.getItem('qiel_bank_account')?'Rekening toko: '+localStorage.getItem('qiel_bank_name')+' '+localStorage.getItem('qiel_bank_account'):'Lengkapi nomor rekening toko di menu Pengaturan jika diperlukan.');document.getElementById('payment-modal').classList.add('show')}
+function openPayment(){if(!Object.keys(cart).length){alert('Pilih produk terlebih dahulu.');return}closeModal('cart-sheet-modal');paymentMethod='Cash';selectPay('Cash');document.getElementById('pay-total').textContent=rupiah(cartTotal());document.getElementById('cash-received').value='';document.getElementById('transfer-bank').value='';document.getElementById('transfer-note').value='';document.getElementById('account-note').textContent=(localStorage.getItem('qiel_bank_account')?'Rekening toko: '+localStorage.getItem('qiel_bank_name')+' '+localStorage.getItem('qiel_bank_account'):'Lengkapi nomor rekening toko di menu Pengaturan jika diperlukan.');document.getElementById('payment-modal').classList.add('show')}
 function selectPay(m){paymentMethod=m;document.getElementById('pay-cash').classList.toggle('selected',m==='Cash');document.getElementById('pay-transfer').classList.toggle('selected',m==='Transfer');document.getElementById('cash-fields').style.display=m==='Cash'?'block':'none';document.getElementById('transfer-fields').style.display=m==='Transfer'?'block':'none'}
 function updateChange(){const v=Number(document.getElementById('cash-received').value||0)-cartTotal();document.getElementById('change').textContent=rupiah(Math.max(0,v))}
-function completeSale(){const total=cartTotal();if(!total){alert('Keranjang kosong.');return}const received=Number(document.getElementById('cash-received').value||0);if(paymentMethod==='Cash'&&received<total){alert('Uang diterima masih kurang dari total belanja.');return}const items=Object.entries(cart).map(([id,q])=>{const p=products.find(x=>x.id===Number(id));return {id:p.id,name:p.name,price:p.price,qty:q,subtotal:p.price*q,emoji:p.emoji}});for(const it of items){const p=products.find(x=>x.id===it.id);p.stock=Math.max(0,p.stock-it.qty)}const sale={id:'Q'+Date.now().toString().slice(-8),date:new Date().toISOString(),day:todayKey(),items,total,method:paymentMethod,received:paymentMethod==='Cash'?received:total,change:paymentMethod==='Cash'?received-total:0,bank:paymentMethod==='Transfer'?document.getElementById('transfer-bank').value:'',note:paymentMethod==='Transfer'?document.getElementById('transfer-note').value:''};sales.unshift(sale);persist();cart={};renderCart();closeModal('payment-modal');renderAll();showReceipt(sale)}
+function completeSale(){const total=cartTotal();if(!total){alert('Keranjang kosong.');return}const received=Number(document.getElementById('cash-received').value||0);if(paymentMethod==='Cash'&&received<total){alert('Uang diterima masih kurang dari total belanja.');return}const items=Object.entries(cart).map(([id,q])=>{const p=products.find(x=>x.id===Number(id));return {id:p.id,name:p.name,price:p.price,qty:q,subtotal:p.price*q,emoji:p.emoji}});for(const it of items){const p=products.find(x=>x.id===it.id);p.stock=Math.max(0,p.stock-it.qty)}const sale={id:'Q'+Date.now().toString().slice(-8),date:new Date().toISOString(),day:todayKey(),items,total,method:paymentMethod,received:paymentMethod==='Cash'?received:total,change:paymentMethod==='Cash'?received-total:0,bank:paymentMethod==='Transfer'?document.getElementById('transfer-bank').value:'',note:paymentMethod==='Transfer'?document.getElementById('transfer-note').value:''};sales.unshift(sale);persist();cart={};renderCart();closeModal('payment-modal');closeModal('cart-sheet-modal');renderAll();showReceipt(sale)}
 function showReceipt(s){const store=localStorage.getItem('qiel_store_name')||'KIOS QIEL';let t=`          ${store}\\n   Belanja Mudah, Hidup Lebih Baik\\n--------------------------------\\nNo: ${s.id}\\nTanggal: ${new Date(s.date).toLocaleString('id-ID')}\\n--------------------------------\\n`;s.items.forEach(i=>{t+=`${i.name}\\n ${i.qty} x ${rupiah(i.price)} = ${rupiah(i.subtotal)}\\n`});t+=`--------------------------------\\nTotal: ${rupiah(s.total)}\\nPembayaran: ${s.method}\\n`;if(s.method==='Cash')t+=`Tunai: ${rupiah(s.received)}\\nKembalian: ${rupiah(s.change)}\\n`;else if(s.bank)t+=`Bank: ${s.bank}\\n`;t+='--------------------------------\\n       Terima kasih!\\n    Sudah berbelanja di KIOS QIEL';document.getElementById('receipt-content').textContent=t;document.getElementById('receipt-modal').classList.add('show')}
-function printReceipt(){const content=document.getElementById('receipt-content').textContent;const w=window.open('','_blank','width=420,height=650');if(!w){alert('Izinkan pop-up browser untuk mencetak struk.');return}w.document.write('<html><head><title>Struk KIOS QIEL</title><style>body{font:12px monospace;padding:18px;white-space:pre-wrap}button{padding:10px}</style></head><body><pre>'+content.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</pre><button onclick="window.print()">Cetak / Simpan PDF</button><script>
-/* PWA: daftar service worker hanya pada HTTPS atau localhost. */
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./service-worker.js').catch(function (err) {
-      console.warn('Service worker tidak dapat didaftarkan:', err);
-    });
-  });
-}
-</script>
-</body></html>');w.document.close()}
+function printReceipt(){const content=document.getElementById('receipt-content').textContent;const w=window.open('','_blank','width=420,height=650');if(!w){alert('Izinkan pop-up browser untuk mencetak struk.');return}w.document.write('<html><head><title>Struk KIOS QIEL</title><style>body{font:12px monospace;padding:18px;white-space:pre-wrap}button{padding:10px}</style></head><body><pre>'+content.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</pre><button onclick="window.print()">Cetak / Simpan PDF</button></body></html>');w.document.close()}
 function closeModal(id){document.getElementById(id).classList.remove('show')}
 function renderHome(){const today=sales.filter(s=>s.day===todayKey());document.getElementById('stat-sales').textContent=rupiah(today.reduce((a,s)=>a+s.total,0));document.getElementById('stat-count').textContent=today.length;document.getElementById('stat-products').textContent=products.length;document.getElementById('recent-list').innerHTML=sales.length?sales.slice(0,5).map(s=>`<div class="list-row"><div><b>${s.id}</b><div class="small-muted">${new Date(s.date).toLocaleString('id-ID')} · ${s.method}</div></div><b>${rupiah(s.total)}</b></div>`).join(''):'<div class="empty">Belum ada transaksi. Mulai transaksi pertama Anda!</div>'}
-function renderManageProducts(){const q=(document.getElementById('manage-search')?.value||'').toLowerCase();const list=products.filter(p=>p.name.toLowerCase().includes(q));document.getElementById('manage-products').innerHTML=list.length?list.map(p=>`<div class="list-row"><div style="display:flex;gap:10px;align-items:center"><span style="font-size:24px;width:38px;display:grid;place-items:center">${p.photo?`<img src="${p.photo}" alt="${esc(p.name)}" style="width:38px;height:38px;object-fit:contain;border-radius:8px">`:esc(p.emoji||'🛍️')}</span><div><b>${esc(p.name)}</b><div class="small-muted">${esc(p.category)} · Stok ${p.stock}</div><div style="color:var(--blue);font-weight:850;margin-top:3px">${rupiah(p.price)}</div></div></div><div style="display:flex;gap:5px"><button class="secondary" onclick="editProduct(${p.id})">Edit</button><button class="secondary danger" onclick="deleteProduct(${p.id})">×</button></div></div>`).join(''):'<div class="empty">Belum ada produk.</div>'}
+function renderManageProducts(){const q=(document.getElementById('manage-search')?.value||'').toLowerCase();const list=products.filter(p=>p.name.toLowerCase().includes(q));document.getElementById('manage-products').innerHTML=list.length?list.map(p=>{const i=products.findIndex(x=>x.id===p.id);return `<div class="list-row"><div style="display:flex;gap:10px;align-items:center;min-width:0"><span style="font-size:24px;width:38px;display:grid;place-items:center;flex-shrink:0">${p.photo?`<img src="${p.photo}" alt="${esc(p.name)}" style="width:38px;height:38px;object-fit:contain;border-radius:8px">`:esc(p.emoji||'🛍️')}</span><div style="min-width:0"><b>${esc(p.name)}</b><div class="small-muted">${esc(p.category)} · Stok ${p.stock}</div><div style="color:var(--blue);font-weight:850;margin-top:3px">${rupiah(p.price)}</div></div></div><div style="display:flex;gap:5px;align-items:center;flex-shrink:0"><button class="secondary" title="Naikkan urutan" aria-label="Naikkan urutan ${esc(p.name)}" onclick="moveProduct(${p.id},-1)" ${i===0?'disabled':''}>↑</button><button class="secondary" title="Turunkan urutan" aria-label="Turunkan urutan ${esc(p.name)}" onclick="moveProduct(${p.id},1)" ${i===products.length-1?'disabled':''}>↓</button><button class="secondary" onclick="editProduct(${p.id})">Edit</button><button class="secondary danger" onclick="deleteProduct(${p.id})">×</button></div></div>`}).join(''):'<div class="empty">Belum ada produk.</div>'}
+function moveProduct(id,d){const i=products.findIndex(p=>p.id===id),j=i+d;if(i<0||j<0||j>=products.length)return;[products[i],products[j]]=[products[j],products[i]];persist();renderProducts();renderManageProducts()}
 function openProductForm(){document.getElementById('product-form-title').textContent='Tambah Produk';document.getElementById('edit-product-id').value='';['form-name','form-price','form-stock','form-emoji'].forEach(id=>document.getElementById(id).value='');document.getElementById('form-category').value='Lainnya';pendingProductPhoto='';document.getElementById('form-photo-file').value='';renderProductPhotoPreview();document.getElementById('product-modal').classList.add('show')}
 function editProduct(id){const p=products.find(x=>x.id===id);if(!p)return;document.getElementById('product-form-title').textContent='Edit Produk';document.getElementById('edit-product-id').value=id;document.getElementById('form-name').value=p.name;document.getElementById('form-category').value=p.category;document.getElementById('form-price').value=p.price;document.getElementById('form-stock').value=p.stock;document.getElementById('form-emoji').value=p.emoji||'';pendingProductPhoto=p.photo||'';document.getElementById('form-photo-file').value='';renderProductPhotoPreview();document.getElementById('product-modal').classList.add('show')}
 function renderProductPhotoPreview(){const el=document.getElementById('form-photo-preview');if(!el)return;el.innerHTML=pendingProductPhoto?`<img src="${pendingProductPhoto}" alt="Pratinjau foto produk">`:(document.getElementById('form-emoji')?.value||'🛍️')}
@@ -279,10 +302,18 @@ function loadProductPhoto(event){const file=event.target.files&&event.target.fil
 function saveProduct(){const id=Number(document.getElementById('edit-product-id').value);const name=document.getElementById('form-name').value.trim(),price=Number(document.getElementById('form-price').value),stock=Number(document.getElementById('form-stock').value);if(!name||document.getElementById('form-price').value===''||price<0||document.getElementById('form-stock').value===''||stock<0){alert('Isi nama, harga jual, dan stok dengan benar.');return}const old=id?products.find(x=>x.id===id):null;const product={id:id||Date.now(),name,category:document.getElementById('form-category').value,price,stock,emoji:document.getElementById('form-emoji').value.trim()||'🛍️',photo:pendingProductPhoto||''};if(id)products=products.map(x=>x.id===id?product:x);else products.push(product);persist();closeModal('product-modal');renderAll();renderManageProducts()}
 function deleteProduct(id){if(!confirm('Hapus produk ini?'))return;products=products.filter(p=>p.id!==id);delete cart[id];persist();renderAll();renderManageProducts();renderCart()}
 function renderReports(){
+ const cashSales=sales.filter(s=>(s.method||'Cash')==='Cash');
+ const transferSales=sales.filter(s=>s.method==='Transfer');
  document.getElementById('report-sales').textContent=rupiah(sales.reduce((a,s)=>a+Number(s.total||0),0));
  document.getElementById('report-count').textContent=sales.length;
- document.getElementById('transactions-list').innerHTML=sales.length?sales.map(s=>`<div class="list-row"><div style="min-width:0;flex:1"><b>${esc(s.id)}</b><div class="small-muted">${new Date(s.date).toLocaleString('id-ID')} · ${esc(s.method||'Cash')} · ${(s.items||[]).reduce((a,i)=>a+Number(i.qty||0),0)} item</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px"><button class="secondary" style="padding:6px 8px" onclick="reprintSale('${esc(s.id)}')">Lihat Struk</button><button class="secondary" style="padding:6px 8px" onclick="editSale('${esc(s.id)}')">✏️ Edit</button><button class="secondary danger" style="padding:6px 8px" onclick="deleteSale('${esc(s.id)}')">🗑️ Hapus</button></div></div><b>${rupiah(s.total)}</b></div>`).join(''):'<div class="empty">Belum ada data penjualan.</div>';
+ const sum=list=>list.reduce((a,s)=>a+Number(s.total||0),0);
+ const renderGroup=(title,list,color)=>`<div class="panel" style="padding:12px;min-width:0"><div style="font-weight:900;font-size:15px;margin-bottom:4px">${title}</div><div style="font-size:17px;font-weight:900;color:${color};margin-bottom:8px">${rupiah(sum(list))}</div><div class="small-muted" style="margin-bottom:6px">${list.length} transaksi</div>${list.length?list.map(s=>{
+  const names=(s.items||[]).map(i=>`${esc(i.name)} × ${Number(i.qty||0)}`).join(', ');
+  return `<div class="list-row" style="align-items:flex-start"><div style="min-width:0;flex:1"><b>${names||'Nama barang tidak tersedia'}</b><div class="small-muted">${new Date(s.date).toLocaleString('id-ID')}</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px"><button class="secondary" style="padding:6px 8px" onclick="reprintSale('${esc(s.id)}')">Lihat Struk</button><button class="secondary" style="padding:6px 8px" onclick="editSale('${esc(s.id)}')">✏️ Edit</button><button class="secondary danger" style="padding:6px 8px" onclick="deleteSale('${esc(s.id)}')">🗑️ Hapus</button></div></div></div>`;
+ }).join(''):'<div class="empty">Belum ada transaksi.</div>'}</div>`;
+ document.getElementById('transactions-list').innerHTML=`<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start">${renderGroup('💵 CASH',cashSales,'#0eaa78')}${renderGroup('🏦 TRANSFER',transferSales,'#2563eb')}</div>`;
 }
+
 function editSale(id){
  const s=sales.find(x=>String(x.id)===String(id));if(!s)return;
  document.getElementById('edit-sale-id').value=s.id;
@@ -494,19 +525,26 @@ async function importFullBackup(event){
  }catch(err){alert('Pemulihan gagal: '+(err&&err.message?err.message:'file tidak dapat dibaca.'));}
  finally{input.value=''}
 }
-function exportCSV(){const rows=[['ID Transaksi','Tanggal','Metode Pembayaran','Nama Produk','Jumlah','Harga Jual','Subtotal','Total Transaksi']];sales.forEach(s=>s.items.forEach(i=>rows.push([s.id,new Date(s.date).toLocaleString('id-ID'),s.method,i.name,i.qty,i.price,i.subtotal,s.total])));const csv='\\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\\r\\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='laporan-kios-qiel.csv';a.click();URL.revokeObjectURL(url)}
+function exportCSV(){
+ const rows=[['Nama Barang','Jumlah','Harga Jual','Subtotal','Tanggal','Metode Pembayaran','Total Transaksi']];
+ sales.forEach(s=>(s.items||[]).forEach(i=>rows.push([i.name,i.qty,i.price,i.subtotal,new Date(s.date).toLocaleString('id-ID'),s.method||'Cash',s.total])));
+ const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='laporan-kios-qiel.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)
+}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 (function init(){document.getElementById('store-name').value=localStorage.getItem('qiel_store_name')||'KIOS QIEL';document.getElementById('store-tagline').value=localStorage.getItem('qiel_store_tagline')||'Belanja Mudah, Hidup Lebih Baik';document.getElementById('bank-account').value=localStorage.getItem('qiel_bank_account')||'';document.getElementById('bank-name').value=localStorage.getItem('qiel_bank_name')||'';document.querySelector('.brand').innerHTML=esc(document.getElementById('store-name').value).replace('QIEL','<span>QIEL</span>');document.querySelector('.tag').textContent=document.getElementById('store-tagline').value;applyStoreLogo();renderAll();loadFolderHandle().then(h=>{if(h){qielBackupDirectory=h;folderStatus('Folder tersimpan: '+h.name+'. Jika izin masih aktif, folder siap digunakan; jika tidak, pilih folder kembali.')}}).catch(()=>{})})();
 </script>
+
 <script>
-/* PWA: daftar service worker hanya pada HTTPS atau localhost. */
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./service-worker.js').catch(function (err) {
-      console.warn('Service worker tidak dapat didaftarkan:', err);
+    navigator.serviceWorker.register('./sw.js').catch(function (err) {
+      console.warn('KIOS QIEL: service worker belum aktif.', err);
     });
   });
 }
 </script>
+
 </body>
 </html>
