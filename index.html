@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#075bd8">
+<meta name="description" content="KIOS QIEL — aplikasi kasir, produk, transaksi, dan laporan penjualan.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<title>KIOS QIEL — Kasir</title>
+<style>
+:root{--blue:#075bd8;--blue2:#087cff;--navy:#07327b;--yellow:#ffd62e;--bg:#f2f6fc;--ink:#13233d;--muted:#70809b;--line:#e5ebf4;--green:#10b981;--red:#ef4444}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink)}button,input,select{font:inherit}button{cursor:pointer;border:0}
+header{background:linear-gradient(125deg,#0646b4,#087cff);color:white;padding:18px 18px 22px;border-radius:0 0 24px 24px;box-shadow:0 8px 22px #075bd826}
+.top{display:flex;align-items:center;gap:12px}.logo{width:52px;height:52px;display:grid;place-items:center;background:#fff;border:3px solid var(--yellow);border-radius:17px;font-size:27px;box-shadow:0 3px 0 #bd9a00}.brand{font-size:21px;font-weight:900;letter-spacing:.3px}.brand span{color:var(--yellow)}.tag{font-size:11px;opacity:.9;margin-top:2px}.date{margin-left:auto;font-size:11px;text-align:right;line-height:1.5;opacity:.9}
+main{max-width:1000px;margin:auto;padding:16px 14px 95px}.section-title{font-size:18px;font-weight:850;margin:20px 0 12px}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{padding:15px;border-radius:17px;background:#fff;box-shadow:0 3px 14px #1d3c6b0b;border:1px solid #edf1f8}.stat .icon{font-size:20px}.stat .label{font-size:11px;color:var(--muted);margin-top:8px}.stat .num{font-size:19px;font-weight:900;margin-top:3px}.stat.blue{background:linear-gradient(135deg,#087cff,#075bd8);color:#fff}.stat.blue .label{color:#d9e9ff}
+.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.action{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 4px;text-align:center;color:var(--ink);font-size:11px;font-weight:750;box-shadow:0 2px 8px #1d3c6b07}.action b{display:block;font-size:23px;margin-bottom:7px}.action:active,.product:active{transform:scale(.98)}
+.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:0 3px 14px #1d3c6b08}.search{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;background:#fbfcff}.search:focus,input:focus,select:focus{border-color:#7bb6ff;box-shadow:0 0 0 3px #087cff16}
+.chips{display:flex;gap:7px;overflow:auto;margin:11px 0 13px;padding-bottom:2px}.chip{white-space:nowrap;background:#f0f5fc;color:#50627d;padding:8px 12px;border-radius:99px;font-size:11px;font-weight:750}.chip.active{background:var(--blue);color:white}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product{position:relative;text-align:left;padding:12px;background:#fff;border:1px solid var(--line);border-radius:16px;min-width:0;color:var(--ink)}.prod-emoji{height:65px;display:grid;place-items:center;font-size:42px;background:#f5f8fd;border-radius:12px;margin-bottom:10px;overflow:hidden}.prod-emoji img{width:100%;height:100%;object-fit:contain}.mini-emoji img{width:36px;height:36px;object-fit:contain;border-radius:8px}.photo-preview{width:94px;height:94px;border-radius:14px;border:1px solid var(--line);background:#f5f8fd;display:grid;place-items:center;overflow:hidden;font-size:38px;margin-top:8px}.photo-preview img{width:100%;height:100%;object-fit:contain}.prod-name{font-size:12px;font-weight:800;line-height:1.3;min-height:31px}.prod-meta{font-size:10px;color:var(--muted);margin:4px 0 8px}.price{font-size:14px;color:var(--blue);font-weight:900}.add{position:absolute;right:10px;bottom:11px;background:var(--blue);color:white;border-radius:10px;width:30px;height:30px;font-size:20px}
+.cart-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.cart-row:last-child{border:0}.mini-emoji{font-size:25px;width:36px;text-align:center}.cart-info{flex:1;min-width:0}.cart-name{font-size:12px;font-weight:800}.cart-price{font-size:11px;color:var(--blue);margin-top:3px}.qty{display:flex;align-items:center;gap:8px}.qty button{width:27px;height:27px;border-radius:9px;background:#edf4ff;color:var(--blue);font-weight:900}.qty span{font-size:12px;font-weight:800;min-width:12px;text-align:center}.total-line{display:flex;justify-content:space-between;align-items:center;margin:12px 0;font-size:13px}.grand{font-size:18px;font-weight:950;color:var(--blue)}.primary{width:100%;padding:14px;background:linear-gradient(100deg,var(--blue),#0783ff);color:white;border-radius:13px;font-weight:850;box-shadow:0 5px 12px #087cff28}.secondary{padding:11px 13px;border-radius:11px;background:#edf4ff;color:var(--blue);font-weight:800}.danger{background:#fff0f0;color:var(--red)}
+.pay-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pay-option{border:2px solid var(--line);border-radius:14px;padding:15px 8px;background:#fff;text-align:center;font-weight:800;color:var(--ink)}.pay-option .pay-icon{font-size:27px;display:block;margin-bottom:6px}.pay-option small{display:block;font-weight:500;color:var(--muted);font-size:10px;margin-top:4px}.pay-option.selected{border-color:var(--blue);background:#edf5ff;color:var(--blue)}.field{display:block;font-size:12px;font-weight:750;margin:12px 0 6px}.input{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;outline:none}
+.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:5;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 5px calc(9px + env(safe-area-inset-bottom));box-shadow:0 -4px 20px #1d3c6b0c}.tab{background:none;color:#8290a7;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:750;min-width:58px}.tab span{font-size:21px}.tab.active{color:var(--blue)}
+.page{display:none}.page.active{display:block}.empty{text-align:center;color:var(--muted);padding:24px 8px;font-size:13px}.list-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px}.list-row:last-child{border:0}.badge{font-size:10px;padding:5px 8px;border-radius:8px;background:#e8fff5;color:#07845c;font-weight:800}
+.modal-back{display:none;position:fixed;inset:0;background:#061b3c88;z-index:20;align-items:flex-end;justify-content:center}.modal-back.show{display:flex}.modal{background:#fff;width:100%;max-width:600px;border-radius:24px 24px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}.modal-head{display:flex;align-items:center;justify-content:space-between;font-size:18px;font-weight:900;margin-bottom:12px}.close{background:#eef3fa;border-radius:10px;width:35px;height:35px;font-size:20px}
+.notice{background:#fff8d9;color:#705900;border-radius:12px;padding:11px;font-size:11px;line-height:1.5;margin:12px 0}.receipt{font-family:ui-monospace,monospace;font-size:12px;line-height:1.6;padding:15px;border:1px dashed #b8c5d8;border-radius:12px;white-space:pre-wrap}.small-muted{font-size:11px;color:var(--muted)}
+@media(min-width:720px){main{padding:22px 22px 35px}.stats{grid-template-columns:repeat(4,1fr)}.layout{display:grid;grid-template-columns:1.3fr .9fr;gap:16px;align-items:start}.products{grid-template-columns:repeat(3,minmax(0,1fr))}.tabbar{position:static;max-width:1000px;margin:0 auto 20px;border:1px solid var(--line);border-radius:16px;box-shadow:none}.modal-back{align-items:center}.modal{border-radius:22px;margin:20px}}
+
+/* Modern refresh */
+:root{--bg:#f4f7fb;--ink:#15233b;--muted:#71809a;--line:#e7edf5;--blue:#2563eb;--blue2:#4f8cff;--navy:#102b63;--yellow:#ffe16a;--green:#0eaa78;--red:#e5484d}
+body{background:radial-gradient(ellipse at top left,#eaf2ff 0,transparent 38%),var(--bg);letter-spacing:-.01em}
+header{background:linear-gradient(125deg,#102b63 0%,#155eef 60%,#5795ff 100%);padding:20px 18px 25px;border-radius:0 0 30px 30px;box-shadow:0 12px 34px #174ea622}
+.logo{width:58px;height:58px;border-radius:20px;font-size:29px;overflow:hidden;flex-shrink:0}
+.logo img{width:100%;height:100%;object-fit:cover}
+.brand{font-size:22px;letter-spacing:-.5px}
+.tag{font-size:12px;opacity:.88}
+main{max-width:1080px;padding:20px 15px 100px}
+.section-title{font-size:19px;letter-spacing:-.45px;margin:23px 0 13px}
+.stat,.panel{border-radius:21px;box-shadow:0 8px 24px #142c5010;border-color:#e8eef7}
+.stat{padding:17px}
+.stat.blue{background:linear-gradient(135deg,#2563eb,#438cff)}
+.stat .num{font-size:21px;letter-spacing:-.5px}
+.action{border-radius:17px;padding:15px 5px;box-shadow:0 5px 15px #142c5009;transition:transform .15s,box-shadow .15s}
+.action:active{transform:scale(.97)}
+.action b{font-size:24px}
+.panel{padding:16px}
+.search,.input{border-radius:14px;padding:13px 14px}
+.product{border-radius:19px;padding:12px;box-shadow:0 3px 12px #142c5008;transition:transform .15s,border-color .15s}
+.product:hover{border-color:#a8c8ff}
+.prod-emoji{border-radius:15px;background:linear-gradient(135deg,#f3f7ff,#eaf1ff)}
+.add{border-radius:11px;box-shadow:0 4px 10px #2563eb2b}
+.primary{border-radius:15px;background:linear-gradient(110deg,#2563eb,#5795ff);box-shadow:0 7px 18px #2563eb26}
+.secondary{border-radius:13px}
+.chip{border-radius:999px}
+.tabbar{padding:11px 5px calc(11px + env(safe-area-inset-bottom));background:#ffffffed;backdrop-filter:blur(18px);border-top-color:#e7edf5}
+.tab{gap:5px;font-size:10px}
+.tab span{font-size:22px}
+.modal{border-radius:27px 27px 0 0;padding:22px 18px calc(24px + env(safe-area-inset-bottom))}
+.modal-head{letter-spacing:-.4px}
+.field{margin:14px 0 7px}
+.notice{border-radius:14px}
+@media(min-width:720px){.tabbar{border-radius:20px;backdrop-filter:blur(18px)}.modal{border-radius:25px}}
+
+</style>
+</head>
+<body>
+<header>
+ <div class="top">
+  <div class="logo" id="store-logo">🛒</div>
+  <div><div class="brand">KIOS <span>QIEL</span></div><div class="tag">Belanja Mudah, Hidup Lebih Baik</div></div>
+  <div class="date" id="clock"></div>
+ </div>
+</header>
+<main>
+ <section class="page active" id="page-home">
+  <div class="section-title">Halo, Selamat Datang! 👋</div>
+  <div class="stats">
+   <div class="stat blue"><div class="icon">💰</div><div class="label">Penjualan Hari Ini</div><div class="num" id="stat-sales">Rp0</div></div>
+   <div class="stat"><div class="icon">🧾</div><div class="label">Transaksi Hari Ini</div><div class="num" id="stat-count">0</div></div>
+   <div class="stat"><div class="icon">📦</div><div class="label">Jenis Produk</div><div class="num" id="stat-products">8</div></div>
+   <div class="stat"><div class="icon">💳</div><div class="label">Pembayaran</div><div class="num" id="stat-method">Cash / TF</div></div>
+  </div>
+  <div class="section-title">Menu Cepat</div>
+  <div class="actions">
+   <button class="action" onclick="showPage('kasir')"><b>🛒</b>Transaksi</button>
+   <button class="action" onclick="showPage('produk')"><b>🧃</b>Produk</button>
+   <button class="action" onclick="showPage('laporan')"><b>📊</b>Laporan</button>
+   <button class="action" onclick="showPage('pengaturan')"><b>⚙️</b>Pengaturan</button>
+  </div>
+  <div class="section-title">Transaksi Terbaru</div>
+  <div class="panel" id="recent-list"><div class="empty">Belum ada transaksi. Mulai transaksi pertama Anda!</div></div>
+ </section>
+
+ <section class="page" id="page-kasir">
+  <div class="section-title">🛒 Transaksi Kasir</div>
+  <div class="layout">
+   <div class="panel">
+    <input class="search" id="product-search" placeholder="🔎 Cari nama produk..." oninput="renderProducts()">
+    <div class="chips" id="category-chips"></div>
+    <div class="products" id="product-grid"></div>
+   </div>
+   <div class="panel" style="margin-top:14px" id="cart-panel">
+    <div style="font-weight:900;font-size:16px">Keranjang Belanja <span id="cart-count" class="small-muted"></span></div>
+    <div id="cart-items"><div class="empty">Pilih produk untuk memulai transaksi.</div></div>
+    <div class="total-line"><span>Total Belanja</span><span class="grand" id="cart-total">Rp0</span></div>
+    <button class="primary" onclick="openPayment()">Lanjut Pembayaran →</button>
+    <button class="secondary danger" style="width:100%;margin-top:8px" onclick="clearCart()">Kosongkan Keranjang</button>
+   </div>
+  </div>
+ </section>
+
+ <section class="page" id="page-produk">
+  <div class="section-title">📦 Daftar Produk</div>
+  <div class="panel">
+   <input class="search" id="manage-search" placeholder="🔎 Cari produk..." oninput="renderManageProducts()">
+   <button class="primary" style="margin-top:12px" onclick="openProductForm()">＋ Tambah Produk</button>
+   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+    <button class="secondary" onclick="exportProductsJSON()">⬇️ Cadangkan Produk</button>
+    <button class="secondary" onclick="document.getElementById('import-products-file').click()">⬆️ Impor Produk</button>
+   </div>
+   <input id="import-products-file" type="file" accept=".json,application/json" style="display:none" onchange="importProductsJSON(event)">
+   <div class="small-muted" style="margin-top:8px;line-height:1.5">Cadangan hanya berisi daftar produk (nama, kategori, harga, stok, emoji, dan ID). File JSON ini dapat diimpor ke KIOS QIEL lain yang memiliki fitur impor produk.</div>
+   <div id="manage-products" style="margin-top:10px"></div>
+  </div>
+ </section>
+
+ <section class="page" id="page-laporan">
+  <div class="section-title">📊 Laporan Penjualan</div>
+  <div class="stats">
+   <div class="stat blue"><div class="label">Total Penjualan</div><div class="num" id="report-sales">Rp0</div></div>
+   <div class="stat"><div class="label">Jumlah Transaksi</div><div class="num" id="report-count">0</div></div>
+  </div>
+  <div class="section-title">Riwayat Transaksi</div>
+  <div class="panel">
+   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <button class="secondary" onclick="exportCSV()">⬇️ Unduh Laporan CSV</button>
+    <button class="secondary" onclick="exportSalesJSON()">🗂️ Cadangkan Riwayat</button>
+   </div>
+   <div id="transactions-list" style="margin-top:10px"><div class="empty">Belum ada data penjualan.</div></div>
+   <button class="secondary danger" style="width:100%;margin-top:12px" onclick="clearSales()">🗑️ Kosongkan Semua Riwayat</button>
+  </div>
+ </section>
+
+ <section class="page" id="page-pengaturan">
+  <div class="section-title">⚙️ Pengaturan Toko</div>
+  <div class="panel">
+   <label class="field">Nama Toko</label><input class="input" id="store-name" value="KIOS QIEL">
+   <label class="field">Slogan</label><input class="input" id="store-tagline" value="Belanja Mudah, Hidup Lebih Baik">
+    <label class="field">Logo / Ikon Toko</label>
+    <div style="display:flex;align-items:center;gap:12px;margin:8px 0 10px">
+     <div id="logo-preview" style="width:64px;height:64px;border:2px solid #e5ebf4;border-radius:18px;display:grid;place-items:center;font-size:30px;background:#f4f7fb;overflow:hidden">🛒</div>
+     <div style="flex:1;min-width:0"><input class="input" id="store-logo-file" type="file" accept="image/*" onchange="previewLogoFile(event)" style="padding:9px;font-size:12px"><div class="small-muted" style="margin-top:5px">Pilih gambar dari HP (PNG, JPG, WebP).</div></div>
+    </div>
+    <label class="field">Atau gunakan emoji sebagai ikon</label><input class="input" id="store-logo-emoji" maxlength="8" placeholder="Contoh: 🛒" value="🛒">
+    <button class="secondary" style="margin-top:8px;width:100%" onclick="resetStoreLogo()">Kembalikan ikon bawaan</button>
+   <label class="field">Nomor rekening untuk Transfer (opsional)</label><input class="input" id="bank-account" placeholder="Contoh: 1234567890">
+   <label class="field">Nama bank (opsional)</label><input class="input" id="bank-name" placeholder="Contoh: BRI / BCA / BNI">
+   <button class="primary" style="margin-top:14px" onclick="saveSettings()">Simpan Pengaturan</button>
+   <div class="section-title" style="margin-top:22px">💾 Penyimpanan Ganda & Cadangan</div>
+   <div class="notice">Data tetap tersimpan otomatis di browser. Jika browser mendukung akses folder, pilih satu folder KIOS_QIEL di penyimpanan internal. Aplikasi akan menyimpan file data lengkap dan salinan foto/logo ke dalam folder tersebut. Jika akses folder tidak tersedia, gunakan ekspor/impor file di bawah.</div>
+   <button class="primary" type="button" onclick="chooseBackupFolder()">📁 Pilih Folder KIOS_QIEL</button>
+   <button class="primary" type="button" style="width:100%;margin-top:8px" onclick="saveBackupToFolder()">💾 Simpan Cadangan ke Folder</button>
+   <button class="secondary" type="button" style="width:100%;margin-top:8px" onclick="restoreBackupFromFolder()">↩️ Pulihkan dari Folder</button>
+   <div id="folder-status" class="small-muted" role="status" style="margin-top:8px;line-height:1.5">Folder belum dipilih pada perangkat ini.</div>
+   <div class="section-title" style="margin-top:18px;font-size:15px">Alternatif file cadangan</div>
+   <button class="secondary" type="button" onclick="exportFullBackup()">⬇️ Unduh Cadangan Semua Data</button>
+   <button class="secondary" type="button" style="width:100%;margin-top:8px" onclick="document.getElementById('import-full-backup-file').click()">⬆️ Pulihkan dari File JSON</button>
+   <input id="import-full-backup-file" type="file" accept=".json,application/json" style="display:none" onchange="importFullBackup(event)">
+   <div id="backup-status" class="small-muted" role="status" style="margin-top:9px;line-height:1.5">Penyimpanan browser aktif. Belum ada status cadangan pada sesi ini.</div>
+   <div class="notice">Penting: pemulihan akan mengganti data produk, transaksi, dan pengaturan yang ada saat ini. Buat cadangan terbaru sebelum memulihkan. Jangan bagikan file cadangan karena dapat berisi seluruh riwayat transaksi.</div>
+   <button class="secondary" style="width:100%" onclick="resetDemo()">Pulihkan Produk Contoh</button>
+  </div>
+  <div class="section-title">Tentang Aplikasi</div><div class="panel"><b>KIOS QIEL Kasir</b><p class="small-muted">Aplikasi kasir sederhana tanpa login. Mendukung transaksi tunai dan transfer, struk, produk, dan laporan penjualan.</p><div class="small-muted">Versi 2.1 · Penyimpanan otomatis di browser + cadangan lengkap ke file internal HP.</div></div>
+ </section>
+</main>
+<nav class="tabbar">
+ <button class="tab active" data-page="home" onclick="showPage('home')"><span>⌂</span>Beranda</button>
+ <button class="tab" data-page="kasir" onclick="showPage('kasir')"><span>🛒</span>Kasir</button>
+ <button class="tab" data-page="produk" onclick="showPage('produk')"><span>📦</span>Produk</button>
+ <button class="tab" data-page="laporan" onclick="showPage('laporan')"><span>▥</span>Laporan</button>
+ <button class="tab" data-page="pengaturan" onclick="showPage('pengaturan')"><span>⚙</span>Pengaturan</button>
+</nav>
+
+<div class="modal-back" id="payment-modal" onclick="if(event.target===this)closeModal('payment-modal')"><div class="modal">
+ <div class="modal-head">Pembayaran <button class="close" onclick="closeModal('payment-modal')">×</button></div>
+ <div class="total-line"><span>Total Belanja</span><span class="grand" id="pay-total">Rp0</span></div>
+ <div class="pay-options">
+  <button class="pay-option selected" id="pay-cash" onclick="selectPay('Cash')"><span class="pay-icon">💵</span>Cash (Tunai)<small>Bayar langsung</small></button>
+  <button class="pay-option" id="pay-transfer" onclick="selectPay('Transfer')"><span class="pay-icon">🏦</span>Transfer (TF)<small>Transfer bank</small></button>
+ </div>
+ <div id="cash-fields"><label class="field">Uang diterima (Rp)</label><input class="input" id="cash-received" type="number" min="0" inputmode="numeric" placeholder="Masukkan uang dari pelanggan" oninput="updateChange()"><div class="total-line"><span>Kembalian</span><b id="change">Rp0</b></div></div>
+ <div id="transfer-fields" style="display:none"><label class="field">Nama bank (opsional)</label><input class="input" id="transfer-bank" class="input" placeholder="Nama bank pengirim"><label class="field">Catatan transfer (opsional)</label><input class="input" id="transfer-note" placeholder="Nomor referensi / catatan"><div class="notice" id="account-note">Lengkapi nomor rekening toko di menu Pengaturan jika diperlukan.</div></div>
+ <button class="primary" style="margin-top:12px" onclick="completeSale()">✓ Konfirmasi Pembayaran</button>
+</div></div>
+
+<div class="modal-back" id="product-modal" onclick="if(event.target===this)closeModal('product-modal')"><div class="modal">
+ <div class="modal-head"><span id="product-form-title">Tambah Produk</span><button class="close" onclick="closeModal('product-modal')">×</button></div>
+ <input type="hidden" id="edit-product-id">
+ <label class="field">Nama Produk</label><input class="input" id="form-name" placeholder="Contoh: Air Mineral 600 ml">
+ <label class="field">Kategori</label><select class="input" id="form-category"><option>Minuman</option><option>Makanan</option><option>Snack</option><option>Kebutuhan</option><option>Lainnya</option></select>
+ <label class="field">Harga Jual (Rp)</label><input class="input" id="form-price" type="number" min="0" inputmode="numeric" placeholder="Contoh: 5000">
+ <label class="field">Stok</label><input class="input" id="form-stock" type="number" min="0" inputmode="numeric" placeholder="Contoh: 20">
+ <label class="field">Foto Produk dari Album/Galeri (opsional)</label><input class="input" id="form-photo-file" type="file" accept="image/*" onchange="loadProductPhoto(event)"><div class="small-muted" style="margin-top:6px">Pilih foto dari album HP. Foto otomatis diperkecil agar lebih hemat penyimpanan.</div><div class="photo-preview" id="form-photo-preview">🛍️</div><button class="secondary danger" style="margin-top:8px" type="button" onclick="clearProductPhoto()">Hapus Foto Produk</button>
+ <label class="field">Emoji produk (dipakai jika tidak ada foto)</label><input class="input" id="form-emoji" maxlength="4" placeholder="Contoh: 🥤">
+ <button class="primary" style="margin-top:16px" onclick="saveProduct()">Simpan Produk</button>
+</div></div>
+
+<div class="modal-back" id="edit-sale-modal" onclick="if(event.target===this)closeModal('edit-sale-modal')"><div class="modal">
+ <div class="modal-head">Edit Transaksi <button class="close" onclick="closeModal('edit-sale-modal')">×</button></div>
+ <input type="hidden" id="edit-sale-id">
+ <label class="field">Tanggal dan waktu</label><input class="input" id="edit-sale-date" type="datetime-local">
+ <label class="field">Metode pembayaran</label><select class="input" id="edit-sale-method"><option>Cash</option><option>Transfer</option></select>
+ <label class="field">Total transaksi (Rp)</label><input class="input" id="edit-sale-total" type="number" min="0" inputmode="numeric">
+ <label class="field">Uang diterima (Rp, untuk tunai)</label><input class="input" id="edit-sale-received" type="number" min="0" inputmode="numeric">
+ <label class="field">Nama bank / catatan transfer (opsional)</label><input class="input" id="edit-sale-bank" placeholder="Nama bank">
+ <label class="field">Catatan transfer (opsional)</label><input class="input" id="edit-sale-note" placeholder="Catatan">
+ <div class="notice">Mengedit transaksi memperbarui tanggal, metode pembayaran, dan total pada riwayat. Rincian item dan stok produk tidak diubah.</div>
+ <button class="primary" style="margin-top:12px" onclick="saveSaleEdit()">Simpan Perubahan</button>
+</div></div>
+
+<div class="modal-back" id="receipt-modal" onclick="if(event.target===this)closeModal('receipt-modal')"><div class="modal">
+ <div class="modal-head">Struk Pembelian <button class="close" onclick="closeModal('receipt-modal')">×</button></div>
+ <div class="receipt" id="receipt-content"></div>
+ <button class="primary" style="margin-top:12px" onclick="printReceipt()">🖨️ Cetak / Simpan PDF</button>
+ <button class="secondary" style="width:100%;margin-top:8px" onclick="closeModal('receipt-modal')">Selesai</button>
+</div></div>
+
+<script>
+const DEFAULT_PRODUCTS=[
+{id:1,name:'Aqua 600 ml',category:'Minuman',price:5000,stock:24,emoji:'🧴'},
+{id:2,name:'Teh Botol',category:'Minuman',price:4000,stock:18,emoji:'🧃'},
+{id:3,name:'Indomie Goreng',category:'Makanan',price:3500,stock:36,emoji:'🍜'},
+{id:4,name:'Taro Net',category:'Snack',price:2500,stock:12,emoji:'🍘'},
+{id:5,name:'Mie Sedaap',category:'Makanan',price:3000,stock:20,emoji:'🍝'},
+{id:6,name:'Roti Tawar',category:'Makanan',price:8000,stock:8,emoji:'🍞'},
+{id:7,name:'Susu UHT',category:'Minuman',price:3000,stock:15,emoji:'🥛'},
+{id:8,name:'Sabun Mandi',category:'Kebutuhan',price:5000,stock:10,emoji:'🧼'}
+];
+const rupiah=n=>'Rp'+Number(n||0).toLocaleString('id-ID');
+const todayKey=()=>new Date().toLocaleDateString('sv-SE');
+let products=load('qiel_products',DEFAULT_PRODUCTS), sales=load('qiel_sales',[]), cart={}, category='Semua', paymentMethod='Cash', pendingProductPhoto='';
+function load(k,fallback){try{const x=localStorage.getItem(k);return x?JSON.parse(x):JSON.parse(JSON.stringify(fallback))}catch(e){return JSON.parse(JSON.stringify(fallback))}}
+function persist(){localStorage.setItem('qiel_products',JSON.stringify(products));localStorage.setItem('qiel_sales',JSON.stringify(sales))}
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.page===p));if(p==='kasir')renderProducts();if(p==='produk')renderManageProducts();if(p==='laporan')renderReports();if(p==='home')renderHome();window.scrollTo({top:0,behavior:'smooth'})}
+function updateClock(){document.getElementById('clock').innerHTML=new Date().toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'})+'<br>'+new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}
+setInterval(updateClock,30000);updateClock();
+function productVisual(p,cls=''){return p.photo?`<span class="${cls}"><img src="${p.photo}" alt="${esc(p.name||'Foto produk')}"></span>`:`<span class="${cls}">${esc(p.emoji||'🛍️')}</span>`}
+function renderProducts(){const q=(document.getElementById('product-search')?.value||'').toLowerCase();const cats=['Semua',...new Set(products.map(p=>p.category))];document.getElementById('category-chips').innerHTML=cats.map(c=>`<button class="chip ${category===c?'active':''}" onclick="category='${esc(c)}';renderProducts()">${esc(c)}</button>`).join('');const list=products.filter(p=>(category==='Semua'||p.category===category)&&p.name.toLowerCase().includes(q));document.getElementById('product-grid').innerHTML=list.length?list.map(p=>`<button class="product" onclick="addCart(${p.id})"><div class="prod-emoji">${p.photo?`<img src="${p.photo}" alt="${esc(p.name)}">`:esc(p.emoji||'🛍️')}</div><div class="prod-name">${esc(p.name)}</div><div class="prod-meta">${esc(p.category)} · Stok ${p.stock}</div><div class="price">${rupiah(p.price)}</div><span class="add">+</span></button>`).join(''):'<div class="empty">Produk tidak ditemukan.</div>'}
+function addCart(id){const p=products.find(x=>x.id===id);if(!p||p.stock<=0){alert('Stok produk habis.');return}if((cart[id]||0)>=p.stock){alert('Jumlah melebihi stok yang tersedia.');return}cart[id]=(cart[id]||0)+1;renderCart()}
+function changeQty(id,d){const p=products.find(x=>x.id===id);cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];else if(p&&cart[id]>p.stock){cart[id]=p.stock;alert('Jumlah melebihi stok.')}renderCart()}
+function cartTotal(){return Object.entries(cart).reduce((s,[id,q])=>{const p=products.find(x=>x.id===Number(id));return s+(p?p.price*q:0)},0)}
+function renderCart(){const entries=Object.entries(cart);document.getElementById('cart-count').textContent=entries.length?`(${entries.reduce((s,x)=>s+x[1],0)} item)`:'';document.getElementById('cart-items').innerHTML=entries.length?entries.map(([id,q])=>{const p=products.find(x=>x.id===Number(id));return p?`<div class="cart-row"><div class="mini-emoji">${p.photo?`<img src="${p.photo}" alt="${esc(p.name)}">`:esc(p.emoji||'🛍️')}</div><div class="cart-info"><div class="cart-name">${esc(p.name)}</div><div class="cart-price">${rupiah(p.price)} × ${q}</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${q}</span><button onclick="changeQty(${p.id},1)">+</button></div></div>`:''}).join(''):'<div class="empty">Pilih produk untuk memulai transaksi.</div>';document.getElementById('cart-total').textContent=rupiah(cartTotal())}
+function clearCart(){if(Object.keys(cart).length&&!confirm('Kosongkan semua isi keranjang?'))return;cart={};renderCart()}
+function openPayment(){if(!Object.keys(cart).length){alert('Pilih produk terlebih dahulu.');return}paymentMethod='Cash';selectPay('Cash');document.getElementById('pay-total').textContent=rupiah(cartTotal());document.getElementById('cash-received').value='';document.getElementById('transfer-bank').value='';document.getElementById('transfer-note').value='';document.getElementById('account-note').textContent=(localStorage.getItem('qiel_bank_account')?'Rekening toko: '+localStorage.getItem('qiel_bank_name')+' '+localStorage.getItem('qiel_bank_account'):'Lengkapi nomor rekening toko di menu Pengaturan jika diperlukan.');document.getElementById('payment-modal').classList.add('show')}
+function selectPay(m){paymentMethod=m;document.getElementById('pay-cash').classList.toggle('selected',m==='Cash');document.getElementById('pay-transfer').classList.toggle('selected',m==='Transfer');document.getElementById('cash-fields').style.display=m==='Cash'?'block':'none';document.getElementById('transfer-fields').style.display=m==='Transfer'?'block':'none'}
+function updateChange(){const v=Number(document.getElementById('cash-received').value||0)-cartTotal();document.getElementById('change').textContent=rupiah(Math.max(0,v))}
+function completeSale(){const total=cartTotal();if(!total){alert('Keranjang kosong.');return}const received=Number(document.getElementById('cash-received').value||0);if(paymentMethod==='Cash'&&received<total){alert('Uang diterima masih kurang dari total belanja.');return}const items=Object.entries(cart).map(([id,q])=>{const p=products.find(x=>x.id===Number(id));return {id:p.id,name:p.name,price:p.price,qty:q,subtotal:p.price*q,emoji:p.emoji}});for(const it of items){const p=products.find(x=>x.id===it.id);p.stock=Math.max(0,p.stock-it.qty)}const sale={id:'Q'+Date.now().toString().slice(-8),date:new Date().toISOString(),day:todayKey(),items,total,method:paymentMethod,received:paymentMethod==='Cash'?received:total,change:paymentMethod==='Cash'?received-total:0,bank:paymentMethod==='Transfer'?document.getElementById('transfer-bank').value:'',note:paymentMethod==='Transfer'?document.getElementById('transfer-note').value:''};sales.unshift(sale);persist();cart={};renderCart();closeModal('payment-modal');renderAll();showReceipt(sale)}
+function showReceipt(s){const store=localStorage.getItem('qiel_store_name')||'KIOS QIEL';let t=`          ${store}\\n   Belanja Mudah, Hidup Lebih Baik\\n--------------------------------\\nNo: ${s.id}\\nTanggal: ${new Date(s.date).toLocaleString('id-ID')}\\n--------------------------------\\n`;s.items.forEach(i=>{t+=`${i.name}\\n ${i.qty} x ${rupiah(i.price)} = ${rupiah(i.subtotal)}\\n`});t+=`--------------------------------\\nTotal: ${rupiah(s.total)}\\nPembayaran: ${s.method}\\n`;if(s.method==='Cash')t+=`Tunai: ${rupiah(s.received)}\\nKembalian: ${rupiah(s.change)}\\n`;else if(s.bank)t+=`Bank: ${s.bank}\\n`;t+='--------------------------------\\n       Terima kasih!\\n    Sudah berbelanja di KIOS QIEL';document.getElementById('receipt-content').textContent=t;document.getElementById('receipt-modal').classList.add('show')}
+function printReceipt(){const content=document.getElementById('receipt-content').textContent;const w=window.open('','_blank','width=420,height=650');if(!w){alert('Izinkan pop-up browser untuk mencetak struk.');return}w.document.write('<html><head><title>Struk KIOS QIEL</title><style>body{font:12px monospace;padding:18px;white-space:pre-wrap}button{padding:10px}</style></head><body><pre>'+content.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</pre><button onclick="window.print()">Cetak / Simpan PDF</button><script>
+/* PWA: daftar service worker hanya pada HTTPS atau localhost. */
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./service-worker.js').catch(function (err) {
+      console.warn('Service worker tidak dapat didaftarkan:', err);
+    });
+  });
+}
+</script>
+</body></html>');w.document.close()}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function renderHome(){const today=sales.filter(s=>s.day===todayKey());document.getElementById('stat-sales').textContent=rupiah(today.reduce((a,s)=>a+s.total,0));document.getElementById('stat-count').textContent=today.length;document.getElementById('stat-products').textContent=products.length;document.getElementById('recent-list').innerHTML=sales.length?sales.slice(0,5).map(s=>`<div class="list-row"><div><b>${s.id}</b><div class="small-muted">${new Date(s.date).toLocaleString('id-ID')} · ${s.method}</div></div><b>${rupiah(s.total)}</b></div>`).join(''):'<div class="empty">Belum ada transaksi. Mulai transaksi pertama Anda!</div>'}
+function renderManageProducts(){const q=(document.getElementById('manage-search')?.value||'').toLowerCase();const list=products.filter(p=>p.name.toLowerCase().includes(q));document.getElementById('manage-products').innerHTML=list.length?list.map(p=>`<div class="list-row"><div style="display:flex;gap:10px;align-items:center"><span style="font-size:24px;width:38px;display:grid;place-items:center">${p.photo?`<img src="${p.photo}" alt="${esc(p.name)}" style="width:38px;height:38px;object-fit:contain;border-radius:8px">`:esc(p.emoji||'🛍️')}</span><div><b>${esc(p.name)}</b><div class="small-muted">${esc(p.category)} · Stok ${p.stock}</div><div style="color:var(--blue);font-weight:850;margin-top:3px">${rupiah(p.price)}</div></div></div><div style="display:flex;gap:5px"><button class="secondary" onclick="editProduct(${p.id})">Edit</button><button class="secondary danger" onclick="deleteProduct(${p.id})">×</button></div></div>`).join(''):'<div class="empty">Belum ada produk.</div>'}
+function openProductForm(){document.getElementById('product-form-title').textContent='Tambah Produk';document.getElementById('edit-product-id').value='';['form-name','form-price','form-stock','form-emoji'].forEach(id=>document.getElementById(id).value='');document.getElementById('form-category').value='Lainnya';pendingProductPhoto='';document.getElementById('form-photo-file').value='';renderProductPhotoPreview();document.getElementById('product-modal').classList.add('show')}
+function editProduct(id){const p=products.find(x=>x.id===id);if(!p)return;document.getElementById('product-form-title').textContent='Edit Produk';document.getElementById('edit-product-id').value=id;document.getElementById('form-name').value=p.name;document.getElementById('form-category').value=p.category;document.getElementById('form-price').value=p.price;document.getElementById('form-stock').value=p.stock;document.getElementById('form-emoji').value=p.emoji||'';pendingProductPhoto=p.photo||'';document.getElementById('form-photo-file').value='';renderProductPhotoPreview();document.getElementById('product-modal').classList.add('show')}
+function renderProductPhotoPreview(){const el=document.getElementById('form-photo-preview');if(!el)return;el.innerHTML=pendingProductPhoto?`<img src="${pendingProductPhoto}" alt="Pratinjau foto produk">`:(document.getElementById('form-emoji')?.value||'🛍️')}
+function clearProductPhoto(){pendingProductPhoto='';document.getElementById('form-photo-file').value='';renderProductPhotoPreview()}
+function loadProductPhoto(event){const file=event.target.files&&event.target.files[0];if(!file)return;if(!file.type.startsWith('image/')){alert('Pilih file foto/gambar.');event.target.value='';return}const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{const max=600,scale=Math.min(1,max/Math.max(img.width,img.height)),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);pendingProductPhoto=canvas.toDataURL('image/jpeg',0.78);renderProductPhotoPreview()};img.onerror=()=>alert('Foto tidak dapat dibuka. Coba pilih foto lain.');img.src=reader.result};reader.readAsDataURL(file)}
+function saveProduct(){const id=Number(document.getElementById('edit-product-id').value);const name=document.getElementById('form-name').value.trim(),price=Number(document.getElementById('form-price').value),stock=Number(document.getElementById('form-stock').value);if(!name||document.getElementById('form-price').value===''||price<0||document.getElementById('form-stock').value===''||stock<0){alert('Isi nama, harga jual, dan stok dengan benar.');return}const old=id?products.find(x=>x.id===id):null;const product={id:id||Date.now(),name,category:document.getElementById('form-category').value,price,stock,emoji:document.getElementById('form-emoji').value.trim()||'🛍️',photo:pendingProductPhoto||''};if(id)products=products.map(x=>x.id===id?product:x);else products.push(product);persist();closeModal('product-modal');renderAll();renderManageProducts()}
+function deleteProduct(id){if(!confirm('Hapus produk ini?'))return;products=products.filter(p=>p.id!==id);delete cart[id];persist();renderAll();renderManageProducts();renderCart()}
+function renderReports(){
+ document.getElementById('report-sales').textContent=rupiah(sales.reduce((a,s)=>a+Number(s.total||0),0));
+ document.getElementById('report-count').textContent=sales.length;
+ document.getElementById('transactions-list').innerHTML=sales.length?sales.map(s=>`<div class="list-row"><div style="min-width:0;flex:1"><b>${esc(s.id)}</b><div class="small-muted">${new Date(s.date).toLocaleString('id-ID')} · ${esc(s.method||'Cash')} · ${(s.items||[]).reduce((a,i)=>a+Number(i.qty||0),0)} item</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px"><button class="secondary" style="padding:6px 8px" onclick="reprintSale('${esc(s.id)}')">Lihat Struk</button><button class="secondary" style="padding:6px 8px" onclick="editSale('${esc(s.id)}')">✏️ Edit</button><button class="secondary danger" style="padding:6px 8px" onclick="deleteSale('${esc(s.id)}')">🗑️ Hapus</button></div></div><b>${rupiah(s.total)}</b></div>`).join(''):'<div class="empty">Belum ada data penjualan.</div>';
+}
+function editSale(id){
+ const s=sales.find(x=>String(x.id)===String(id));if(!s)return;
+ document.getElementById('edit-sale-id').value=s.id;
+ const d=new Date(s.date);document.getElementById('edit-sale-date').value=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+ document.getElementById('edit-sale-method').value=s.method==='Transfer'?'Transfer':'Cash';
+ document.getElementById('edit-sale-total').value=Number(s.total||0);
+ document.getElementById('edit-sale-received').value=Number(s.received||s.total||0);
+ document.getElementById('edit-sale-bank').value=s.bank||'';
+ document.getElementById('edit-sale-note').value=s.note||'';
+ document.getElementById('edit-sale-modal').classList.add('show');
+}
+function saveSaleEdit(){
+ const id=document.getElementById('edit-sale-id').value,s=sales.find(x=>String(x.id)===String(id));
+ const dateValue=document.getElementById('edit-sale-date').value,totalRaw=document.getElementById('edit-sale-total').value;
+ const total=Number(totalRaw),received=Number(document.getElementById('edit-sale-received').value||0),method=document.getElementById('edit-sale-method').value;
+ if(!s)return;
+ if(!dateValue||totalRaw===''||!Number.isFinite(total)||total<0||!Number.isFinite(received)||received<0){alert('Periksa tanggal, total, dan uang diterima.');return}
+ if(method==='Cash'&&received<total){alert('Uang diterima tidak boleh kurang dari total untuk pembayaran tunai.');return}
+ const date=new Date(dateValue);s.date=date.toISOString();s.day=date.toLocaleDateString('sv-SE');
+ s.total=total;s.method=method;s.received=method==='Cash'?received:total;s.change=method==='Cash'?received-total:0;
+ s.bank=document.getElementById('edit-sale-bank').value.trim();s.note=document.getElementById('edit-sale-note').value.trim();
+ persist();closeModal('edit-sale-modal');renderAll();alert('Transaksi berhasil diperbarui.');
+}
+function deleteSale(id){
+ const s=sales.find(x=>String(x.id)===String(id));if(!s)return;
+ if(!confirm('Hapus transaksi '+s.id+' dari riwayat? Tindakan ini tidak bisa dibatalkan. Stok produk tidak akan berubah.'))return;
+ sales=sales.filter(x=>String(x.id)!==String(id));persist();renderAll();
+}
+function clearSales(){
+ if(!sales.length){alert('Riwayat transaksi sudah kosong.');return}
+ if(!confirm('Yakin ingin mengosongkan SEMUA riwayat transaksi? Data penjualan akan dihapus permanen dari browser ini. Produk dan stok tidak berubah. Sebaiknya unduh cadangan terlebih dahulu.'))return;
+ if(!confirm('Konfirmasi terakhir: hapus '+sales.length+' transaksi?'))return;
+ sales=[];persist();renderAll();alert('Semua riwayat transaksi telah dikosongkan.');
+}
+function exportSalesJSON(){
+ const backup={app:'KIOS QIEL',type:'sales-backup',version:1,exportedAt:new Date().toISOString(),sales};
+ const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json;charset=utf-8'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='cadangan-riwayat-kios-qiel-'+todayKey()+'.json';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function reprintSale(id){const s=sales.find(x=>x.id===id);if(s)showReceipt(s)}
+function renderAll(){renderHome();renderProducts();renderManageProducts();renderReports()}
+let pendingLogoData='';
+function previewLogoFile(event){
+ const file=event.target.files&&event.target.files[0];if(!file)return;
+ if(!file.type.startsWith('image/')){alert('Pilih file gambar yang valid.');event.target.value='';return}
+ if(file.size>2*1024*1024){alert('Ukuran gambar maksimal 2 MB agar penyimpanan browser tidak cepat penuh.');event.target.value='';return}
+ const reader=new FileReader();reader.onload=()=>{pendingLogoData=String(reader.result||'');document.getElementById('logo-preview').innerHTML='<img alt="Pratinjau logo" src="'+pendingLogoData+'" style="width:100%;height:100%;object-fit:cover;border-radius:16px">'};reader.readAsDataURL(file);
+}
+function applyStoreLogo(){
+ const data=localStorage.getItem('qiel_store_logo')||'',emoji=localStorage.getItem('qiel_store_logo_emoji')||'🛒';
+ const headerLogo=document.getElementById('store-logo'),preview=document.getElementById('logo-preview');
+ if(headerLogo)headerLogo.innerHTML=data?'<img alt="Logo toko" src="'+data+'">':esc(emoji);
+ if(preview)preview.innerHTML=data?'<img alt="Pratinjau logo" src="'+data+'" style="width:100%;height:100%;object-fit:cover;border-radius:16px">':esc(emoji);
+ const emojiInput=document.getElementById('store-logo-emoji');if(emojiInput)emojiInput.value=emoji;
+}
+function resetStoreLogo(){
+ if(!confirm('Kembalikan ikon toko ke ikon bawaan 🛒?'))return;
+ localStorage.removeItem('qiel_store_logo');localStorage.setItem('qiel_store_logo_emoji','🛒');pendingLogoData='';
+ const fi=document.getElementById('store-logo-file');if(fi)fi.value='';
+ applyStoreLogo();alert('Ikon bawaan dipulihkan.');
+}
+function saveSettings(){
+ localStorage.setItem('qiel_store_name',document.getElementById('store-name').value.trim()||'KIOS QIEL');
+ localStorage.setItem('qiel_store_tagline',document.getElementById('store-tagline').value.trim());
+ localStorage.setItem('qiel_bank_account',document.getElementById('bank-account').value.trim());
+ localStorage.setItem('qiel_bank_name',document.getElementById('bank-name').value.trim());
+ const emoji=document.getElementById('store-logo-emoji').value.trim()||'🛒';
+ localStorage.setItem('qiel_store_logo_emoji',emoji);
+ if(pendingLogoData)localStorage.setItem('qiel_store_logo',pendingLogoData);
+ document.querySelector('.brand').innerHTML=esc(localStorage.getItem('qiel_store_name')).replace('QIEL','<span>QIEL</span>');
+ document.querySelector('.tag').textContent=localStorage.getItem('qiel_store_tagline');
+ applyStoreLogo();alert('Pengaturan berhasil disimpan.');
+}
+function resetDemo(){if(!confirm('Pulihkan daftar produk contoh? Produk saat ini akan diganti.'))return;products=JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));persist();renderAll();alert('Produk contoh dipulihkan.')}
+function exportProductsJSON(){
+ const backup={app:'KIOS QIEL',type:'product-backup',version:1,exportedAt:new Date().toISOString(),products:products.map(p=>({id:p.id,name:p.name,category:p.category,price:p.price,stock:p.stock,emoji:p.emoji||'🛍️',photo:p.photo||''}))};
+ const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json;charset=utf-8'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='cadangan-produk-kios-qiel-'+todayKey()+'.json';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+async function importProductsJSON(event){
+ const input=event.target,file=input.files&&input.files[0];if(!file)return;
+ try{
+  const raw=JSON.parse(await file.text());
+  const incoming=Array.isArray(raw)?raw:raw&&Array.isArray(raw.products)?raw.products:null;
+  if(!incoming)throw new Error('Format file tidak berisi daftar produk.');
+  if(!incoming.every(p=>p&&typeof p.name==='string'&&p.name.trim()&&Number.isFinite(Number(p.price))&&Number(p.price)>=0&&Number.isFinite(Number(p.stock))&&Number(p.stock)>=0)){
+   throw new Error('Ada produk dengan nama, harga, atau stok yang tidak valid.');
+  }
+  const normalized=incoming.map((p,i)=>({id:Number.isFinite(Number(p.id))&&Number(p.id)>0?Number(p.id):Date.now()+i,name:p.name.trim(),category:String(p.category||'Lainnya'),price:Number(p.price),stock:Math.floor(Number(p.stock)),emoji:String(p.emoji||'🛍️'),photo:typeof p.photo==='string'&&p.photo.startsWith('data:image/')?p.photo:''}));
+  if(!normalized.length){alert('File cadangan tidak memiliki produk.');return}
+  const replace=confirm('Ditemukan '+normalized.length+' produk. Tekan OK untuk MENGGANTI seluruh daftar produk saat ini. Tekan Batal untuk memilih opsi gabung.');
+  let next;
+  if(replace){next=normalized;}
+  else{
+   if(!confirm('Gabungkan produk dari file ke daftar saat ini? Produk dengan ID yang sama akan diperbarui; produk lainnya tetap ada.'))return;
+   const map=new Map(products.map(p=>[Number(p.id),p]));
+   normalized.forEach(p=>map.set(p.id,p));
+   next=Array.from(map.values());
+  }
+  products=next;
+  const used=new Set();
+  products=products.map((p,i)=>{let id=Number(p.id);if(!Number.isFinite(id)||id<=0||used.has(id)){id=Date.now()+i;while(used.has(id))id++}used.add(id);return {...p,id}});
+  persist();renderAll();renderManageProducts();renderProducts();
+  alert('Berhasil mengimpor '+normalized.length+' produk.');
+ }catch(err){alert('Gagal mengimpor cadangan: '+(err&&err.message?err.message:'File tidak valid.'))}
+ finally{input.value=''}
+}
+const FULL_BACKUP_KEYS=['qiel_products','qiel_sales','qiel_store_name','qiel_store_tagline','qiel_bank_account','qiel_bank_name','qiel_store_logo','qiel_store_logo_emoji'];
+function fullBackupData(){
+ return {products:JSON.parse(JSON.stringify(products)),sales:JSON.parse(JSON.stringify(sales)),settings:{storeName:localStorage.getItem('qiel_store_name')||'KIOS QIEL',storeTagline:localStorage.getItem('qiel_store_tagline')||'Belanja Mudah, Hidup Lebih Baik',bankAccount:localStorage.getItem('qiel_bank_account')||'',bankName:localStorage.getItem('qiel_bank_name')||'',storeLogo:localStorage.getItem('qiel_store_logo')||'',storeLogoEmoji:localStorage.getItem('qiel_store_logo_emoji')||'🛒'}};
+}
+function setBackupStatus(message){const el=document.getElementById('backup-status');if(el)el.textContent=message}
+function downloadJSONFile(data,filename){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
+function exportFullBackup(){
+ try{const backup={app:'KIOS QIEL',type:'full-backup',version:1,exportedAt:new Date().toISOString(),data:fullBackupData()};
+  const text=JSON.stringify(backup);if(text.length>45*1024*1024){alert('Cadangan terlalu besar untuk diekspor dengan aman dari browser ini. Coba kurangi ukuran foto produk/logo.');return}
+  downloadJSONFile(backup,'cadangan-lengkap-kios-qiel-'+todayKey()+'.json');setBackupStatus('Cadangan lengkap dibuat pada '+new Date().toLocaleString('id-ID')+'. Pastikan file tersimpan di folder Download atau folder pilihan HP.');
+ }catch(err){alert('Cadangan gagal dibuat: '+(err&&err.message?err.message:'penyimpanan tidak dapat dibaca.'))}
+}
+// Folder cadangan memakai File System Access API jika browser mendukungnya.
+// Handle folder disimpan di IndexedDB agar dapat digunakan kembali di sesi berikutnya.
+let qielBackupDirectory = null;
+const QIEL_FOLDER_DB = 'qiel_backup_folder_db';
+function folderStatus(message){const el=document.getElementById('folder-status');if(el)el.textContent=message}
+function supportsFolderAccess(){return typeof window.showDirectoryPicker==='function'}
+function openFolderDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(QIEL_FOLDER_DB,1);req.onupgradeneeded=()=>req.result.createObjectStore('handles');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('Database folder tidak tersedia.'))})}
+async function storeFolderHandle(handle){const db=await openFolderDB();return new Promise((resolve,reject)=>{const tx=db.transaction('handles','readwrite');tx.objectStore('handles').put(handle,'backupDirectory');tx.oncomplete=()=>{db.close();resolve()};tx.onerror=()=>{db.close();reject(tx.error||new Error('Gagal menyimpan pilihan folder.'))}})}
+async function loadFolderHandle(){try{const db=await openFolderDB();return await new Promise((resolve,reject)=>{const tx=db.transaction('handles','readonly'),req=tx.objectStore('handles').get('backupDirectory');req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error);tx.oncomplete=()=>db.close()})}catch(e){return null}}
+async function ensureFolderPermission(handle,write=true){if(!handle)throw new Error('Pilih folder cadangan terlebih dahulu.');const opts={mode:write?'readwrite':'read'};if(handle.queryPermission&&await handle.queryPermission(opts)==='granted')return true;if(handle.requestPermission&&await handle.requestPermission(opts)==='granted')return true;throw new Error('Izin folder belum diberikan. Tekan Pilih Folder KIOS_QIEL lalu izinkan akses.')}
+async function chooseBackupFolder(){
+ if(!supportsFolderAccess()){alert('Browser ini belum mendukung pemilihan folder langsung. Gunakan Unduh Cadangan Semua Data, lalu simpan file di folder KIOS_QIEL melalui aplikasi File HP.');return}
+ try{const handle=await window.showDirectoryPicker({id:'kios-qiel-backup',mode:'readwrite'});await ensureFolderPermission(handle,true);qielBackupDirectory=handle;await storeFolderHandle(handle);folderStatus('Folder aktif: '+handle.name+'. Tekan Simpan Cadangan ke Folder untuk menyimpan data.');setBackupStatus('Folder cadangan berhasil dipilih.');}
+ catch(e){if(e&&e.name==='AbortError')return;alert('Folder belum dapat dipilih: '+(e.message||'akses ditolak.'))}
+}
+async function getBackupDirectory(){if(qielBackupDirectory)return qielBackupDirectory;qielBackupDirectory=await loadFolderHandle();return qielBackupDirectory}
+function dataUrlToBlob(dataUrl){const parts=dataUrl.split(',');const mime=(parts[0].match(/data:([^;]+)/)||[])[1]||'application/octet-stream';const binary=atob(parts[1]||'');const bytes=new Uint8Array(binary.length);for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);return new Blob([bytes],{type:mime})}
+function safeFileBase(name){return String(name||'produk').normalize('NFKD').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,60)||'produk'}
+function extensionFor(dataUrl){const mime=(dataUrl.match(/^data:([^;,]+)/)||[])[1]||'image/jpeg';return ({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif','image/svg+xml':'svg'})[mime]||'img'}
+async function writeBlob(dir,name,blob){const fh=await dir.getFileHandle(name,{create:true});const w=await fh.createWritable();await w.write(blob);await w.close()}
+async function saveBackupToFolder(){
+ try{
+  let dir=await getBackupDirectory();if(!dir){await chooseBackupFolder();dir=await getBackupDirectory();if(!dir)return}
+  await ensureFolderPermission(dir,true);
+  const backup={app:'KIOS QIEL',type:'full-backup',version:1,exportedAt:new Date().toISOString(),data:fullBackupData()};
+  const json=JSON.stringify(backup,null,2);if(json.length>45*1024*1024)throw new Error('Cadangan lebih dari 45 MB. Kurangi ukuran foto terlebih dahulu.');
+  const dataDir=await dir.getDirectoryHandle('Cadangan_Data',{create:true});
+  const photosDir=await dir.getDirectoryHandle('Foto_Produk',{create:true});
+  const logosDir=await dir.getDirectoryHandle('Logo_Toko',{create:true});
+  // File utama di root untuk pemulihan cepat, dan satu salinan bertanggal.
+  await writeBlob(dir,'data_kios_qiel.json',new Blob([json],{type:'application/json;charset=utf-8'}));
+  await writeBlob(dataDir,'cadangan_'+todayKey()+'.json',new Blob([json],{type:'application/json;charset=utf-8'}));
+  let photoCount=0;
+  for(const product of products){if(!product.photo||!product.photo.startsWith('data:image/'))continue;const name='produk_'+String(product.id)+'_'+safeFileBase(product.name)+'.'+extensionFor(product.photo);await writeBlob(photosDir,name,dataUrlToBlob(product.photo));photoCount++}
+  const logo=localStorage.getItem('qiel_store_logo')||'';if(logo.startsWith('data:image/'))await writeBlob(logosDir,'logo_toko.'+extensionFor(logo),dataUrlToBlob(logo));
+  folderStatus('Folder aktif: '+dir.name+' · '+photoCount+' foto produk disalin · logo dan data lengkap tersimpan.');
+  setBackupStatus('Cadangan berhasil disimpan ke folder internal pada '+new Date().toLocaleString('id-ID')+'. File utama: data_kios_qiel.json.');
+  alert('Cadangan berhasil disimpan ke folder '+dir.name+'.\nTermasuk data lengkap, '+photoCount+' foto produk, dan logo jika tersedia.');
+ }catch(e){if(e&&e.name==='NotAllowedError'){folderStatus('Izin folder perlu diberikan kembali.');}alert('Gagal menyimpan ke folder: '+(e.message||'browser tidak mengizinkan akses folder.'))}
+}
+async function restoreBackupFromFolder(){
+ try{const dir=await getBackupDirectory();if(!dir){alert('Pilih folder KIOS_QIEL terlebih dahulu.');return}await ensureFolderPermission(dir,false);const fh=await dir.getFileHandle('data_kios_qiel.json');const file=await fh.getFile();if(file.size>50*1024*1024)throw new Error('Ukuran file cadangan melebihi 50 MB.');const raw=JSON.parse(await file.text());const incoming=validateFullBackup(raw);const photoCount=incoming.products.filter(p=>p.photo).length;
+  if(!confirm('Cadangan valid ditemukan di folder '+dir.name+'.\n• '+incoming.products.length+' produk ('+photoCount+' dengan foto)\n• '+incoming.sales.length+' transaksi\n• Pengaturan dan logo toko\n\nData browser saat ini akan diganti. Lanjutkan?'))return;
+  await applyValidatedFullBackup(incoming);
+  setBackupStatus('Pemulihan dari folder berhasil pada '+new Date().toLocaleString('id-ID')+'.');alert('Pemulihan berhasil dari folder '+dir.name+'.');
+ }catch(e){alert('Gagal memulihkan dari folder: '+(e.message||'file tidak ditemukan atau tidak valid. Pastikan ada file data_kios_qiel.json di folder utama.'))}
+}
+function validateFullBackup(raw){
+ if(!raw||raw.app!=='KIOS QIEL'||raw.type!=='full-backup'||raw.version!==1||!raw.data||typeof raw.data!=='object')throw new Error('Ini bukan file cadangan lengkap KIOS QIEL yang didukung.');
+ const d=raw.data;if(!Array.isArray(d.products)||!Array.isArray(d.sales)||!d.settings||typeof d.settings!=='object')throw new Error('File cadangan tidak lengkap.');
+ if(d.products.length>10000||d.sales.length>100000)throw new Error('Jumlah data pada file terlalu besar.');
+ const normalizedProducts=d.products.map((p,i)=>{
+  if(!p||typeof p.name!=='string'||!p.name.trim()||!Number.isFinite(Number(p.price))||Number(p.price)<0||!Number.isFinite(Number(p.stock))||Number(p.stock)<0)throw new Error('Data produk nomor '+(i+1)+' tidak valid.');
+  if(p.photo&&!(typeof p.photo==='string'&&p.photo.startsWith('data:image/')))throw new Error('Foto produk nomor '+(i+1)+' tidak valid.');
+  return {...p,id:Number.isFinite(Number(p.id))&&Number(p.id)>0?Number(p.id):Date.now()+i,name:p.name.trim(),category:String(p.category||'Lainnya'),price:Number(p.price),stock:Math.floor(Number(p.stock)),emoji:String(p.emoji||'🛍️'),photo:typeof p.photo==='string'?p.photo:''};
+ });
+ const ids=new Set();normalizedProducts.forEach((p,i)=>{if(ids.has(p.id))p.id=Date.now()+i;ids.add(p.id)});
+ const normalizedSales=d.sales.map((sale,i)=>{
+  if(!sale||sale.id===undefined||!sale.date||!Array.isArray(sale.items)||!Number.isFinite(Number(sale.total))||Number(sale.total)<0)throw new Error('Data transaksi nomor '+(i+1)+' tidak valid.');
+  for(const item of sale.items){if(!item||typeof item.name!=='string'||!Number.isFinite(Number(item.qty))||Number(item.qty)<0||!Number.isFinite(Number(item.price))||Number(item.price)<0)throw new Error('Item pada transaksi '+sale.id+' tidak valid.');}
+  return sale;
+ });
+ const st=d.settings;const settings={storeName:String(st.storeName||'KIOS QIEL').slice(0,200),storeTagline:String(st.storeTagline||'Belanja Mudah, Hidup Lebih Baik').slice(0,300),bankAccount:String(st.bankAccount||'').slice(0,200),bankName:String(st.bankName||'').slice(0,200),storeLogo:typeof st.storeLogo==='string'&&st.storeLogo.startsWith('data:image/')?st.storeLogo:'',storeLogoEmoji:String(st.storeLogoEmoji||'🛒').slice(0,8)};
+  if(settings.storeLogo.length>5*1024*1024)throw new Error('File logo terlalu besar.');
+ return {products:normalizedProducts,sales:normalizedSales,settings};
+}
+async function applyValidatedFullBackup(incoming){
+ const st=incoming.settings;const values={qiel_products:JSON.stringify(incoming.products),qiel_sales:JSON.stringify(incoming.sales),qiel_store_name:st.storeName,qiel_store_tagline:st.storeTagline,qiel_bank_account:st.bankAccount,qiel_bank_name:st.bankName,qiel_store_logo:st.storeLogo,qiel_store_logo_emoji:st.storeLogoEmoji};
+ const previous={};FULL_BACKUP_KEYS.forEach(k=>previous[k]=localStorage.getItem(k));
+ try{for(const k of FULL_BACKUP_KEYS){const v=values[k];if(v===null||v==='')localStorage.removeItem(k);else localStorage.setItem(k,v)}}
+ catch(storageError){for(const k of FULL_BACKUP_KEYS){try{if(previous[k]===null)localStorage.removeItem(k);else localStorage.setItem(k,previous[k])}catch(rollbackError){}}throw new Error('Penyimpanan browser tidak cukup untuk memuat semua data. Data lama dipertahankan sejauh browser mengizinkan. Kurangi ukuran foto atau kosongkan ruang penyimpanan lalu coba lagi.');}
+ products=incoming.products;sales=incoming.sales;cart={};pendingLogoData='';
+ document.getElementById('store-name').value=st.storeName;document.getElementById('store-tagline').value=st.storeTagline;document.getElementById('bank-account').value=st.bankAccount;document.getElementById('bank-name').value=st.bankName;
+ const logoFile=document.getElementById('store-logo-file');if(logoFile)logoFile.value='';
+ document.querySelector('.brand').innerHTML=esc(st.storeName).replace('QIEL','<span>QIEL</span>');document.querySelector('.tag').textContent=st.storeTagline;applyStoreLogo();renderAll();renderCart();
+}
+async function importFullBackup(event){
+ const input=event.target,file=input.files&&input.files[0];if(!file)return;
+ try{
+  if(file.size>50*1024*1024)throw new Error('Ukuran file maksimal 50 MB.');
+  const raw=JSON.parse(await file.text());const incoming=validateFullBackup(raw);
+  const photoCount=incoming.products.filter(p=>p.photo).length;
+  const summary='File cadangan valid ditemukan:\n• '+incoming.products.length+' produk ('+photoCount+' dengan foto)\n• '+incoming.sales.length+' transaksi\n• Pengaturan toko dan logo\n\nPulihkan data ini? Data saat ini akan DIGANTI. Disarankan unduh cadangan terbaru terlebih dahulu.';
+  if(!confirm(summary))return;
+  await applyValidatedFullBackup(incoming);
+  setBackupStatus('Pemulihan berhasil pada '+new Date().toLocaleString('id-ID')+'. Data browser telah diperbarui.');alert('Pemulihan berhasil! Produk, foto, transaksi, dan pengaturan toko sudah dimuat.');
+ }catch(err){alert('Pemulihan gagal: '+(err&&err.message?err.message:'file tidak dapat dibaca.'));}
+ finally{input.value=''}
+}
+function exportCSV(){const rows=[['ID Transaksi','Tanggal','Metode Pembayaran','Nama Produk','Jumlah','Harga Jual','Subtotal','Total Transaksi']];sales.forEach(s=>s.items.forEach(i=>rows.push([s.id,new Date(s.date).toLocaleString('id-ID'),s.method,i.name,i.qty,i.price,i.subtotal,s.total])));const csv='\\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\\r\\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='laporan-kios-qiel.csv';a.click();URL.revokeObjectURL(url)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+(function init(){document.getElementById('store-name').value=localStorage.getItem('qiel_store_name')||'KIOS QIEL';document.getElementById('store-tagline').value=localStorage.getItem('qiel_store_tagline')||'Belanja Mudah, Hidup Lebih Baik';document.getElementById('bank-account').value=localStorage.getItem('qiel_bank_account')||'';document.getElementById('bank-name').value=localStorage.getItem('qiel_bank_name')||'';document.querySelector('.brand').innerHTML=esc(document.getElementById('store-name').value).replace('QIEL','<span>QIEL</span>');document.querySelector('.tag').textContent=document.getElementById('store-tagline').value;applyStoreLogo();renderAll();loadFolderHandle().then(h=>{if(h){qielBackupDirectory=h;folderStatus('Folder tersimpan: '+h.name+'. Jika izin masih aktif, folder siap digunakan; jika tidak, pilih folder kembali.')}}).catch(()=>{})})();
+</script>
+<script>
+/* PWA: daftar service worker hanya pada HTTPS atau localhost. */
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./service-worker.js').catch(function (err) {
+      console.warn('Service worker tidak dapat didaftarkan:', err);
+    });
+  });
+}
+</script>
+</body>
+</html>
